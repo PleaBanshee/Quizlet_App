@@ -1,3 +1,4 @@
+// NB! === is a strict comparison (also checks for types). == just checks for values
 const question = document.getElementById('question');
 const choices = Array.from(document.getElementsByClassName('choice-text'));
 
@@ -70,7 +71,13 @@ choices.forEach((choice) => {
         acceptingAnswers = false;
         const selectedChoice = e.target;
         const selectedAnswer = selectedChoice.dataset['number'];
-        getNewQuestion();
+        // ternary operator
+        const classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect';
+        selectedChoice.parentElement.classList.add(classToApply);
+        setTimeout(() => {
+            selectedChoice.parentElement.classList.remove(classToApply);
+            getNewQuestion();
+        },1000)
     });
 });
 
