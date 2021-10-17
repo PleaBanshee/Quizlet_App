@@ -53,7 +53,7 @@ let getNewQuestion = () => {
     if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) { // if no questions left, do the following:
         //go to the end page
         localStorage.setItem('mostRecentScore',score); // stores value of highscore so it can be accessible later
-        return window.location.assign("/finish.html");
+        return window.location.assign("../html/finish.html");
     }
     questionCounter++;
     progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
