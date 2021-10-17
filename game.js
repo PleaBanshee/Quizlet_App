@@ -52,7 +52,8 @@ let startGame = () => {
 let getNewQuestion = () => {
     if (availableQuesions.length === 0 || questionCounter >= MAX_QUESTIONS) { // if no questions left, do the following:
         //go to the end page
-        return window.location.assign("/end.html");
+        localStorage.setItem('mostRecentScore',score); // stores value of highscore so it can be accessible later
+        return window.location.assign("/finish.html");
     }
     questionCounter++;
     progressText.innerText = `Question ${questionCounter}/${MAX_QUESTIONS}`;
