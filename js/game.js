@@ -4,6 +4,9 @@ const choices = Array.from(document.getElementsByClassName("choice-text"));
 const progressText = document.getElementById("progressText");
 const progressBarFull = document.getElementById("progressBarFull");
 const scoreText = document.getElementById("score");
+const loader = document.getElementById("loader")
+const game = document.getElementById("game")
+
 
 let currentQuestion = {};
 let acceptingAnswers = false;
@@ -14,12 +17,25 @@ let availableQuesions = [];
 const CORRECT_BONUS = 10;
 const MAX_QUESTIONS = 3;
 let questions = []
-fetch("../questions.json") // pulls in data from json file in other directory
+
+// pulls in data from accross the web or any json file
+fetch('https://opentdb.com/api.php?amount=10&category=9&difficulty=hard&type=multiple')
 .then(res => {
     return res.json(); // sends a response (with the correct content-type) that is the parameter converted to a JSON string using the JSON
 })
-.then(loadedQuestions => {
-    questions = loadedQuestions;
+.then((loadedQuestions) => {
+    questions = loadedQuestions.results.map((loadedQuestion) => {
+        const formatQuestion = {
+            question: loadedQuestion.question
+        };
+        const answerChoices = [...loadedQuestion.incorrect_answers];
+        formatQuestion.answer = Math.floor(Math.random()*4) + 1;
+        answerChoices.splice(formatQuestion.answer - 1,0,loadedQuestion.correct_answer)
+        answerChoices.forEach((choice,i) => {
+              formatQuestion['choice'+(i+1)] = choice;
+        })
+        return formatQuestion;
+    });
     startGame();
 })
 .catch(err => {
@@ -31,6 +47,8 @@ let startGame = () => {
     score = 0;
     availableQuesions = [...questions];  // spread operator: load all elements into assigned object
     getNewQuestion();
+    game.classList.remove("hidden") // show questions
+    loader.classList.add("hidden") // hide loader
 };
 
 let getNewQuestion = () => {
